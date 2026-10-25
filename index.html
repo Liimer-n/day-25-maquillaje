@@ -1,0 +1,3370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un Ramo de Belleza para Ti | Día del Maquillaje</title>
+  <meta name="description" content="Una experiencia romántica, elegante y luminosa inspirada en ramos de flores con maquillaje. Porque cada rostro tiene una historia: regala belleza, confianza y amor.">
+  
+  <!-- Tipografías de Alta Gama (Google Fonts con fallbacks elegantes para modo offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. VARIABLES CSS & DESIGN SYSTEM
+       Paleta romántica, elegante y cinematográfica
+       ========================================================================== */
+    :root {
+      /* Paleta Maestra */
+      --pink-pastel: #F8C8DC;
+      --pink-intense: #F06292;
+      --pink-dusty: #E8A1B0;
+      --pink-glow: rgba(240, 98, 146, 0.45);
+      --cream-white: #FFF8F5;
+      --cream-card: #FFFFFF;
+      --gold-soft: #E7C98B;
+      --gold-glow: rgba(231, 201, 139, 0.5);
+      --wine-dark: #301824;
+      --wine-deep: #1c0b15;
+      --brown-rose: #70434E;
+      --text-muted: #8c6875;
+      --border-soft: rgba(240, 98, 146, 0.2);
+
+      /* Tipografía */
+      --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-script: 'Great Vibes', 'Dancing Script', cursive;
+      --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
+
+      /* Sombras y Luces */
+      --shadow-sm: 0 4px 15px rgba(48, 24, 36, 0.06);
+      --shadow-md: 0 10px 30px rgba(48, 24, 36, 0.12);
+      --shadow-lg: 0 20px 50px rgba(48, 24, 36, 0.22);
+      --shadow-glow-pink: 0 0 35px rgba(240, 98, 146, 0.4);
+      --shadow-glow-gold: 0 0 25px rgba(231, 201, 139, 0.45);
+
+      /* Transiciones */
+      --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-medium: 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+      --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Geometría */
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+      --radius-full: 9999px;
+    }
+
+    /* Reducción de movimiento accesible */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      background-color: var(--wine-deep);
+      color: var(--wine-dark);
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      background: var(--wine-deep);
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Indicador de foco accesible */
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--gold-soft);
+      outline-offset: 3px;
+    }
+
+    /* Barra de progreso de lectura */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--pink-pastel), var(--pink-intense), var(--gold-soft));
+      z-index: 10000;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 10px var(--pink-intense);
+    }
+
+    /* ==========================================================================
+       2. CANVAS DE PARTÍCULAS Y PÉTALOS
+       ========================================================================== */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    /* ==========================================================================
+       3. PANTALLA INICIAL: LA GRAN SORPRESA (UNBOXING CINEMATOGRÁFICO)
+       ========================================================================== */
+    #surprise-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #3d1b2e 0%, #1a0812 60%, #0d0309 100%);
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s ease;
+    }
+
+    #surprise-screen.opened {
+      opacity: 0;
+      transform: scale(1.08);
+      pointer-events: none;
+    }
+
+    .surprise-halo {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 98, 146, 0.28) 0%, rgba(231, 201, 139, 0.12) 40%, transparent 70%);
+      animation: pulseHalo 4s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes pulseHalo {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.2); opacity: 0.95; }
+    }
+
+    .surprise-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .surprise-pretitle {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--gold-soft);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .surprise-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #fff;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .surprise-script {
+      font-family: var(--font-script);
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      color: var(--pink-pastel);
+      display: block;
+      margin-top: -6px;
+      text-shadow: 0 0 20px var(--pink-glow);
+    }
+
+    .surprise-msg {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1rem;
+      margin: 16px 0 35px;
+      font-weight: 300;
+    }
+
+    /* Caja de Regalo 3D / CSS */
+    .gift-box-wrapper {
+      position: relative;
+      width: 170px;
+      height: 160px;
+      margin: 15px auto 40px;
+      cursor: pointer;
+      perspective: 800px;
+      transition: transform var(--transition-medium);
+    }
+
+    .gift-box-wrapper:hover {
+      transform: translateY(-6px) scale(1.03);
+    }
+
+    .gift-box-body {
+      position: absolute;
+      bottom: 0;
+      width: 160px;
+      height: 110px;
+      left: 5px;
+      background: linear-gradient(145deg, #d84578, #b02356, #80133c);
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .gift-box-body::before {
+      content: '';
+      position: absolute;
+      width: 28px;
+      height: 100%;
+      background: linear-gradient(90deg, #d3a75d, #f9df9b, #e7c98b, #c4994e);
+      box-shadow: 0 0 12px rgba(231, 201, 139, 0.5);
+    }
+
+    .gift-box-lid {
+      position: absolute;
+      top: 30px;
+      left: 0;
+      width: 170px;
+      height: 34px;
+      background: linear-gradient(145deg, #e75388, #c42d63);
+      border-radius: 6px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+      transform-origin: top center;
+      transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+      z-index: 3;
+    }
+
+    .gift-box-lid::before {
+      content: '';
+      position: absolute;
+      left: calc(50% - 14px);
+      width: 28px;
+      height: 100%;
+      background: linear-gradient(90deg, #d3a75d, #f9df9b, #e7c98b);
+    }
+
+    /* Gran Lazo Dorado/Satén */
+    .gift-bow {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 40px;
+      z-index: 4;
+      pointer-events: none;
+      transition: transform 0.6s ease, opacity 0.5s ease;
+    }
+
+    /* Animación de apertura */
+    .gift-box-wrapper.opening .gift-box-lid {
+      transform: translateY(-90px) rotateX(-45deg) scale(0.9);
+      opacity: 0;
+    }
+
+    .gift-box-wrapper.opening .gift-bow {
+      transform: translateX(-50%) translateY(-110px) scale(0.5);
+      opacity: 0;
+    }
+
+    .gift-light-burst {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff, var(--gold-soft), var(--pink-intense), transparent 70%);
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .gift-box-wrapper.opening .gift-light-burst {
+      animation: lightBurst 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes lightBurst {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+      50% { transform: translate(-50%, -50%) scale(40); opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(60); opacity: 0; }
+    }
+
+    /* Botón luminoso */
+    .btn-glow-primary {
+      position: relative;
+      padding: 16px 38px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #f06292 0%, #e91e63 50%, #c2185b 100%);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(240, 98, 146, 0.45), 0 0 15px rgba(240, 98, 146, 0.3);
+      transition: all var(--transition-medium);
+      overflow: hidden;
+    }
+
+    .btn-glow-primary::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+      transform: rotate(25deg);
+      animation: shimmerLoop 3.5s infinite;
+    }
+
+    @keyframes shimmerLoop {
+      0% { left: -60%; }
+      30%, 100% { left: 140%; }
+    }
+
+    .btn-glow-primary:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 35px rgba(240, 98, 146, 0.6), 0 0 25px rgba(231, 201, 139, 0.4);
+    }
+
+    .btn-glow-primary:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-text-skip {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.85rem;
+      margin-top: 18px;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color var(--transition-fast);
+    }
+
+    .btn-text-skip:hover {
+      color: var(--pink-pastel);
+    }
+
+    /* ==========================================================================
+       4. BARRA DE NAVEGACIÓN DE LUJO (HEADER)
+       ========================================================================== */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 16px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all var(--transition-medium);
+      background: rgba(28, 11, 21, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(240, 98, 146, 0.12);
+    }
+
+    .site-header.scrolled {
+      padding: 12px 36px;
+      background: rgba(28, 11, 21, 0.92);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo span {
+      color: var(--pink-pastel);
+      font-family: var(--font-script);
+      font-size: 1.6rem;
+      font-weight: normal;
+    }
+
+    .logo-heart {
+      width: 24px;
+      height: 24px;
+      fill: var(--pink-intense);
+      filter: drop-shadow(0 0 8px var(--pink-intense));
+      animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.18); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.18); }
+      70% { transform: scale(1); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      position: relative;
+      padding: 6px 0;
+      transition: color var(--transition-fast);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--pink-intense), var(--gold-soft));
+      transition: width var(--transition-fast);
+      border-radius: 2px;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #fff;
+    }
+
+    .nav-link:hover::after, .nav-link.active::after {
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-quote {
+      font-family: var(--font-script);
+      color: var(--pink-pastel);
+      font-size: 1.15rem;
+      display: none;
+    }
+
+    @media (min-width: 1100px) {
+      .header-quote { display: block; }
+    }
+
+    /* Botón de Música / Sonido Ambiental */
+    .btn-audio-toggle {
+      background: rgba(240, 98, 146, 0.15);
+      border: 1px solid rgba(240, 98, 146, 0.35);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-audio-toggle:hover {
+      background: rgba(240, 98, 146, 0.3);
+      border-color: var(--pink-intense);
+      box-shadow: 0 0 15px rgba(240, 98, 146, 0.4);
+    }
+
+    .audio-waves {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+    }
+
+    .audio-waves span {
+      width: 2px;
+      background: var(--pink-pastel);
+      border-radius: 1px;
+      height: 4px;
+      transition: height 0.2s ease;
+    }
+
+    .audio-waves.playing span:nth-child(1) { animation: wave 1s infinite alternate 0.1s; }
+    .audio-waves.playing span:nth-child(2) { animation: wave 1s infinite alternate 0.3s; }
+    .audio-waves.playing span:nth-child(3) { animation: wave 1s infinite alternate 0.2s; }
+    .audio-waves.playing span:nth-child(4) { animation: wave 1s infinite alternate 0.4s; }
+
+    @keyframes wave {
+      0% { height: 3px; }
+      100% { height: 14px; }
+    }
+
+    /* Menú móvil toggle */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 868px) {
+      .site-header { padding: 14px 20px; }
+      .nav-links {
+        position: fixed;
+        top: 65px;
+        right: -100%;
+        width: 80%;
+        max-width: 320px;
+        height: calc(100vh - 65px);
+        background: rgba(28, 11, 21, 0.98);
+        flex-direction: column;
+        padding: 35px 24px;
+        gap: 24px;
+        transition: right var(--transition-medium);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      }
+      .nav-links.open { right: 0; }
+      .mobile-menu-btn { display: block; }
+    }
+
+    /* ==========================================================================
+       5. SECCIÓN HERO (PORTADA PRINCIPAL: EL RAMO DE MAQUILLAJE)
+       ========================================================================== */
+    .hero-section {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 120px 5% 70px;
+      background: radial-gradient(circle at 75% 30%, #4a1e36 0%, #2b1120 45%, #15060f 100%);
+      overflow: hidden;
+    }
+
+    /* Luces de fondo y bokeh */
+    .hero-bg-glow {
+      position: absolute;
+      top: 15%;
+      right: 10%;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 98, 146, 0.25) 0%, rgba(231, 201, 139, 0.1) 40%, transparent 70%);
+      filter: blur(50px);
+      pointer-events: none;
+      animation: floatGlow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-30px, 30px) scale(1.1); }
+    }
+
+    .hero-container {
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+      z-index: 5;
+    }
+
+    @media (max-width: 992px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 50px;
+      }
+      .hero-section { padding-top: 100px; }
+    }
+
+    /* Columna Izquierda: Información */
+    .hero-left {
+      color: #fff;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      background: rgba(240, 98, 146, 0.15);
+      border: 1px solid rgba(240, 98, 146, 0.35);
+      color: var(--pink-pastel);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--pink-intense);
+      box-shadow: 0 0 8px var(--pink-intense);
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      font-weight: 400;
+      line-height: 1.12;
+      margin-bottom: 6px;
+      color: #FFFFFF;
+    }
+
+    .hero-title-script {
+      display: block;
+      font-family: var(--font-script);
+      font-size: clamp(3.2rem, 6.8vw, 5.5rem);
+      color: var(--pink-pastel);
+      font-weight: normal;
+      margin-top: -8px;
+      text-shadow: 0 0 25px rgba(240, 98, 146, 0.5), 0 0 45px rgba(240, 98, 146, 0.3);
+      position: relative;
+    }
+
+    .hero-title-script .heart-doodle {
+      position: absolute;
+      top: -10px;
+      right: 15%;
+      width: 38px;
+      height: 38px;
+      fill: none;
+      stroke: var(--pink-pastel);
+      stroke-width: 2;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 0;
+      animation: heartGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes heartGlow {
+      0% { filter: drop-shadow(0 0 5px var(--pink-intense)); transform: rotate(-5deg) scale(0.95); }
+      100% { filter: drop-shadow(0 0 15px var(--pink-pastel)); transform: rotate(5deg) scale(1.05); }
+    }
+
+    .hero-desc {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 500px;
+      margin: 22px 0 35px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 992px) {
+      .hero-desc { margin-left: auto; margin-right: auto; }
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 992px) {
+      .hero-buttons { justify-content: center; }
+    }
+
+    .btn-secondary {
+      padding: 15px 30px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 0.98rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(10px);
+      transition: all var(--transition-medium);
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: var(--pink-pastel);
+      transform: translateY(-2px);
+    }
+
+    /* Contador Romántico de Lujo */
+    .countdown-capsules {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 992px) {
+      .countdown-capsules { justify-content: center; }
+    }
+
+    .time-capsule {
+      background: rgba(25, 9, 19, 0.65);
+      border: 1px solid rgba(240, 98, 146, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      min-width: 68px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .time-capsule:hover {
+      transform: translateY(-3px);
+      border-color: var(--pink-intense);
+    }
+
+    .time-capsule .num {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .time-capsule .lbl {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--pink-dusty);
+      margin-top: 2px;
+    }
+
+    /* Columna Derecha: El Gran Ramo Protagonista */
+    .hero-right {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1200px;
+    }
+
+    .bouquet-card-3d {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      transform-style: preserve-3d;
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0.3, 1);
+      cursor: pointer;
+    }
+
+    /* Resplandor y halo detrás del ramo */
+    .bouquet-halo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 110%;
+      height: 110%;
+      background: radial-gradient(circle, rgba(240, 98, 146, 0.35) 0%, rgba(231, 201, 139, 0.2) 40%, transparent 70%);
+      filter: blur(40px);
+      z-index: 1;
+      border-radius: 50%;
+      animation: pulseHalo 5s infinite alternate;
+      pointer-events: none;
+    }
+
+    .bouquet-img-wrapper {
+      position: relative;
+      z-index: 2;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(240, 98, 146, 0.3);
+      border: 1px solid rgba(240, 98, 146, 0.3);
+      animation: floatBouquet 6s ease-in-out infinite;
+    }
+
+    @keyframes floatBouquet {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(0.8deg); }
+    }
+
+    .bouquet-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bouquet-card-3d:hover .bouquet-img {
+      transform: scale(1.03);
+    }
+
+    /* Tarjeta Pequeña interactiva sobre el ramo */
+    .bouquet-mini-card {
+      position: absolute;
+      bottom: 12%;
+      left: 50%;
+      transform: translateX(-50%) translateZ(40px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(240, 98, 146, 0.2);
+      border: 1px solid rgba(240, 98, 146, 0.3);
+      text-align: center;
+      z-index: 5;
+      cursor: pointer;
+      transition: all var(--transition-medium);
+      max-width: 250px;
+    }
+
+    .bouquet-mini-card:hover {
+      transform: translateX(-50%) translateZ(55px) scale(1.06);
+      background: #FFFFFF;
+      box-shadow: 0 15px 35px rgba(240, 98, 146, 0.4);
+    }
+
+    .bouquet-mini-card p {
+      font-family: var(--font-script);
+      font-size: 1.25rem;
+      color: var(--wine-dark);
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .bouquet-mini-card span {
+      font-size: 0.68rem;
+      color: var(--pink-intense);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-top: 3px;
+    }
+
+    /* Puntos interactivos / Hotspots sobre productos del ramo */
+    .hotspot {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(240, 98, 146, 0.85);
+      border: 2px solid #fff;
+      box-shadow: 0 0 12px var(--pink-intense);
+      cursor: pointer;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--transition-fast);
+      animation: hotspotPulse 2.5s infinite;
+    }
+
+    @keyframes hotspotPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px var(--pink-intense); }
+      50% { transform: scale(1.18); box-shadow: 0 0 20px var(--pink-pastel); }
+    }
+
+    .hotspot::after {
+      content: '+';
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .hotspot-tooltip {
+      position: absolute;
+      bottom: 35px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(28, 11, 21, 0.95);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      white-space: nowrap;
+      border: 1px solid var(--pink-dusty);
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--transition-fast);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .hotspot:hover .hotspot-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Indicador de Desplazamiento Inferior */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 25px;
+      right: 5%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.82rem;
+      text-decoration: none;
+      z-index: 5;
+      transition: color var(--transition-fast);
+    }
+
+    .scroll-indicator:hover {
+      color: var(--pink-pastel);
+    }
+
+    .scroll-circle-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bounceArrow 2s infinite;
+    }
+
+    @keyframes bounceArrow {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(6px); }
+      60% { transform: translateY(3px); }
+    }
+
+    /* ==========================================================================
+       6. SECCIÓN 2: MÁS QUE MAQUILLAJE, ES UNA EMOCIÓN (TEMA CREMA CLARO)
+       ========================================================================== */
+    .emotion-section {
+      background: var(--cream-white);
+      color: var(--wine-dark);
+      padding: 100px 5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emotion-section::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(248, 200, 220, 0.4) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .emotion-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    @media (max-width: 992px) {
+      .emotion-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+      }
+    }
+
+    .emotion-content .section-tag {
+      font-size: 0.82rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--pink-intense);
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-heading-serif {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      line-height: 1.2;
+      color: var(--wine-dark);
+      margin-bottom: 8px;
+    }
+
+    .section-heading-script {
+      font-family: var(--font-script);
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      color: var(--pink-intense);
+      display: block;
+      margin-top: -6px;
+      margin-bottom: 18px;
+    }
+
+    .emotion-desc {
+      color: var(--brown-rose);
+      font-size: 1.08rem;
+      line-height: 1.8;
+      margin-bottom: 35px;
+    }
+
+    /* Grilla de 4 Beneficios de Lujo */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 580px) {
+      .benefits-grid { grid-template-columns: 1fr; }
+    }
+
+    .benefit-card {
+      background: #FFFFFF;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(240, 98, 146, 0.12);
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      transition: all var(--transition-medium);
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--pink-pastel);
+    }
+
+    .benefit-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(248, 200, 220, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--pink-intense);
+    }
+
+    .benefit-info h4 {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--wine-dark);
+      margin-bottom: 4px;
+    }
+
+    .benefit-info p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Polaroid Collage Derecha */
+    .emotion-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .polaroid-group {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      transition: transform var(--transition-slow);
+    }
+
+    .polaroid-group:hover {
+      transform: scale(1.02);
+    }
+
+    .polaroid-img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 45px rgba(48, 24, 36, 0.15);
+      display: block;
+    }
+
+    /* ==========================================================================
+       7. SECCIÓN 3: PERSONALIZA EL RAMO (INTERACTIVO)
+       ========================================================================== */
+    .customizer-section {
+      background: linear-gradient(180deg, #2a1120 0%, #1e0915 100%);
+      color: #fff;
+      padding: 100px 5%;
+      position: relative;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+
+    .section-header-center .section-tag {
+      font-size: 0.82rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-soft);
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .section-header-center h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      font-weight: 400;
+      color: #fff;
+    }
+
+    .section-header-center p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.05rem;
+      margin-top: 12px;
+      font-weight: 300;
+    }
+
+    /* Selector de pestañas / Filtros */
+    .bouquet-filter-pills {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 45px;
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(240, 98, 146, 0.25);
+      color: rgba(255, 255, 255, 0.85);
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-fast);
+    }
+
+    .filter-pill:hover {
+      background: rgba(240, 98, 146, 0.2);
+      border-color: var(--pink-intense);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .filter-pill.active {
+      background: linear-gradient(135deg, var(--pink-intense), #c2185b);
+      border-color: var(--pink-pastel);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(240, 98, 146, 0.45);
+    }
+
+    /* Showcase Interactivo */
+    .customizer-showcase {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(48, 24, 36, 0.55);
+      border: 1px solid rgba(240, 98, 146, 0.25);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(16px);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    @media (max-width: 868px) {
+      .customizer-showcase {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+    }
+
+    .showcase-visual {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      min-height: 380px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      background: #1e0915;
+    }
+
+    .showcase-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.4s ease, transform 0.6s ease;
+    }
+
+    .showcase-badge {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      background: rgba(28, 11, 21, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold-soft);
+      border: 1px solid var(--gold-soft);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .showcase-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .showcase-title {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .showcase-subtitle {
+      font-family: var(--font-script);
+      font-size: 1.8rem;
+      color: var(--pink-pastel);
+      margin-top: -6px;
+    }
+
+    .showcase-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    /* Lista de elementos incluidos en el ramo */
+    .elements-included {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0 15px;
+    }
+
+    .element-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .element-item svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--gold-soft);
+      flex-shrink: 0;
+    }
+
+    .showcase-action-btn {
+      align-self: flex-start;
+      margin-top: 10px;
+    }
+
+    /* ==========================================================================
+       8. SECCIÓN 4: DEDICATORIA ROMÁNTICA (LA CARTA INTERACTIVA)
+       ========================================================================== */
+    .dedication-section {
+      background: var(--cream-white);
+      color: var(--wine-dark);
+      padding: 110px 5%;
+      position: relative;
+    }
+
+    .dedication-card-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      perspective: 1000px;
+    }
+
+    .letter-envelope {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 25px 60px rgba(48, 24, 36, 0.12), 0 0 0 1px rgba(240, 98, 146, 0.15);
+      padding: 55px 50px;
+      position: relative;
+      overflow: hidden;
+      border-left: 6px solid var(--pink-intense);
+    }
+
+    @media (max-width: 768px) {
+      .letter-envelope { padding: 35px 24px; }
+    }
+
+    /* Rosa SVG que se abre */
+    .blooming-rose-container {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rose-petal-anim {
+      transform-origin: center;
+      transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .letter-envelope.opened .rose-petal-anim {
+      transform: scale(1.08) rotate(12deg);
+    }
+
+    .dedication-tagline {
+      text-align: center;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--pink-intense);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dedication-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3.8vw, 2.6rem);
+      text-align: center;
+      line-height: 1.3;
+      color: var(--wine-dark);
+      margin-bottom: 25px;
+    }
+
+    /* Encabezado de la carta con campo editable */
+    .letter-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed rgba(240, 98, 146, 0.3);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .recipient-editable {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--wine-dark);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .name-input-field {
+      border: none;
+      border-bottom: 1.5px solid var(--pink-intense);
+      background: rgba(248, 200, 220, 0.25);
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--pink-intense);
+      padding: 2px 8px;
+      border-radius: 4px;
+      outline: none;
+      max-width: 220px;
+    }
+
+    .letter-date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Contenido de la carta con efecto de revelado / máquina de escribir */
+    .letter-body {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: #4a2835;
+      min-height: 140px;
+      position: relative;
+    }
+
+    .typewriter-text {
+      display: inline;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: var(--pink-intense);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blinkCursor 0.8s infinite;
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .letter-signature {
+      margin-top: 35px;
+      text-align: right;
+    }
+
+    .letter-signature-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .letter-signature-name {
+      font-family: var(--font-script);
+      font-size: 2.2rem;
+      color: var(--pink-intense);
+      line-height: 1.2;
+    }
+
+    .letter-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 35px;
+    }
+
+    /* Sello de cera interactivo */
+    .wax-seal-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #e91e63, #a01040);
+      border: 2px solid #ff80ab;
+      box-shadow: 0 6px 18px rgba(160, 16, 64, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: all var(--transition-fast);
+      margin: 0 auto 10px;
+    }
+
+    .wax-seal-btn:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 24px rgba(160, 16, 64, 0.6);
+    }
+
+    /* ==========================================================================
+       9. SECCIÓN 5: GALERÍA VISUAL EDITORIAL & LIGHTBOX
+       ========================================================================== */
+    .gallery-section {
+      background: #240e1b;
+      color: #fff;
+      padding: 100px 5%;
+      position: relative;
+    }
+
+    .gallery-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    @media (max-width: 992px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 580px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(240, 98, 146, 0.18);
+      background: #180712;
+      transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 20px 45px rgba(240, 98, 146, 0.3);
+      border-color: var(--pink-intense);
+    }
+
+    .gallery-thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-item:hover .gallery-thumbnail {
+      transform: scale(1.08);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(28, 11, 21, 0.92) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 22px;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-overlay h4 {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .gallery-overlay p {
+      font-size: 0.82rem;
+      color: var(--pink-pastel);
+    }
+
+    /* Modal Lightbox */
+    #lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 4, 10, 0.95);
+      backdrop-filter: blur(16px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-medium);
+    }
+
+    #lightbox-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 900px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: var(--radius-md);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(240, 98, 146, 0.35);
+      border: 1px solid rgba(240, 98, 146, 0.3);
+      object-fit: contain;
+    }
+
+    .lightbox-caption {
+      margin-top: 15px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .lightbox-caption h3 {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+    }
+
+    .lightbox-caption p {
+      font-size: 0.9rem;
+      color: var(--pink-pastel);
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -45px;
+      right: 0;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color var(--transition-fast);
+    }
+
+    .lightbox-close-btn:hover {
+      color: var(--pink-intense);
+    }
+
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .lightbox-nav-btn:hover {
+      background: var(--pink-intense);
+      border-color: var(--pink-intense);
+    }
+
+    .lightbox-prev { left: -70px; }
+    .lightbox-next { right: -70px; }
+
+    @media (max-width: 768px) {
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+      .lightbox-close-btn { top: 10px; right: 15px; }
+    }
+
+    /* ==========================================================================
+       10. SECCIÓN 6: MOMENTO FINAL (LA REVELACIÓN DEL REGALO & CIERRE)
+       ========================================================================== */
+    .finale-section {
+      position: relative;
+      background: radial-gradient(circle at center, #351325 0%, #1c0914 60%, #0d0309 100%);
+      color: #fff;
+      padding: 130px 5% 100px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .finale-banner-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .finale-container {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Gran Corazón Neón Latiente */
+    .glowing-neon-heart {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 25px;
+      animation: heartbeat 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 25px var(--pink-intense)) drop-shadow(0 0 50px rgba(240, 98, 146, 0.5));
+    }
+
+    .finale-pretitle {
+      font-size: 0.85rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-soft);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .finale-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .finale-script {
+      font-family: var(--font-script);
+      font-size: clamp(3rem, 6.5vw, 5rem);
+      color: var(--pink-pastel);
+      display: block;
+      margin-top: -6px;
+      margin-bottom: 25px;
+      text-shadow: 0 0 25px var(--pink-glow);
+    }
+
+    .finale-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      color: #FFFFFF;
+      max-width: 680px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Tarjeta Final Conmemorativa */
+    .keepsake-card {
+      background: rgba(48, 24, 36, 0.6);
+      border: 1px solid rgba(240, 98, 146, 0.3);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius-lg);
+      padding: 35px 30px;
+      max-width: 550px;
+      margin: 0 auto 45px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(240, 98, 146, 0.2);
+    }
+
+    .keepsake-meta {
+      font-size: 0.85rem;
+      color: var(--gold-soft);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .keepsake-names {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .keepsake-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    .finale-actions {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================================================
+       11. PIE DE PÁGINA (FOOTER)
+       ========================================================================== */
+    .site-footer {
+      background: #0d0309;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 45px 5% 30px;
+      text-align: center;
+      border-top: 1px solid rgba(240, 98, 146, 0.15);
+      position: relative;
+      z-index: 5;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer-brand span {
+      font-family: var(--font-script);
+      color: var(--pink-pastel);
+      font-size: 1.6rem;
+    }
+
+    .footer-text {
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    .footer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.78rem;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .control-btn:hover {
+      background: rgba(240, 98, 146, 0.25);
+      border-color: var(--pink-intense);
+      color: #fff;
+    }
+
+    /* Modal Secreto de la Tarjeta del Ramo */
+    #secret-card-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 5, 12, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-medium);
+    }
+
+    #secret-card-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .secret-card-content {
+      background: #FFFFFF;
+      color: var(--wine-dark);
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 35px var(--pink-glow);
+      border: 2px solid var(--pink-pastel);
+      position: relative;
+      transform: scale(0.9);
+      transition: transform var(--transition-medium);
+    }
+
+    #secret-card-modal.active .secret-card-content {
+      transform: scale(1);
+    }
+
+    .secret-card-close {
+      position: absolute;
+      top: 15px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--wine-dark);
+    }
+
+    /* Notificación Toast */
+    #toast-notification {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: rgba(28, 11, 21, 0.95);
+      color: #fff;
+      border: 1px solid var(--pink-intense);
+      padding: 14px 22px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      z-index: 10002;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all var(--transition-medium);
+      pointer-events: none;
+    }
+
+    #toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Progreso de Desplazamiento -->
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Canvas Universal de Pétalos y Destellos -->
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==========================================================================
+       PANTALLA INICIAL: LA GRAN SORPRESA
+       ========================================================================== -->
+  <section id="surprise-screen" aria-label="Pantalla de Bienvenida Romántica">
+    <div class="surprise-halo" aria-hidden="true"></div>
+
+    <div class="surprise-content">
+      <div class="surprise-pretitle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <span>Para Alguien Inolvidable</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+
+      <h1 class="surprise-title">
+        Tengo una sorpresa
+        <span class="surprise-script">muy especial para ti</span>
+      </h1>
+
+      <p class="surprise-msg">
+        Un detalle que combina la delicadeza de las flores con el brillo de tu belleza única.
+      </p>
+
+      <!-- Caja de Regalo 3D Interactiva -->
+      <div class="gift-box-wrapper" id="gift-box" role="button" tabindex="0" aria-label="Abrir caja de regalo">
+        <div class="gift-light-burst" aria-hidden="true"></div>
+        <div class="gift-box-lid" aria-hidden="true"></div>
+        <!-- Lazo SVG con brillo satinado -->
+        <svg class="gift-bow" viewBox="0 0 100 50" aria-hidden="true">
+          <path d="M50 25 C30 5, 10 15, 20 30 C30 45, 45 35, 50 25 Z" fill="#E7C98B" stroke="#fdf0cd" stroke-width="1.5"/>
+          <path d="M50 25 C70 5, 90 15, 80 30 C70 45, 55 35, 50 25 Z" fill="#E7C98B" stroke="#fdf0cd" stroke-width="1.5"/>
+          <circle cx="50" cy="25" r="7" fill="#fdf0cd" stroke="#d3a75d" stroke-width="2"/>
+          <path d="M46 28 C40 42, 28 48, 25 50" stroke="#E7C98B" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M54 28 C60 42, 72 48, 75 50" stroke="#E7C98B" stroke-width="4" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="gift-box-body" aria-hidden="true"></div>
+      </div>
+
+      <button class="btn-glow-primary" id="btn-discover" aria-label="Descubrir mi regalo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V8h2v.76L15.38 12 17 10.83 14.92 8H20v6z"/>
+        </svg>
+        <span>Descubrir mi regalo</span>
+      </button>
+
+      <button class="btn-text-skip" id="btn-skip-intro">
+        Omitir animación y ver directo
+      </button>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       BARRA DE NAVEGACIÓN
+       ========================================================================== -->
+  <header class="site-header" id="site-header">
+    <a href="#hero" class="brand-logo" aria-label="BeautyGift Inicio">
+      <svg class="logo-heart" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      BeautyGift <span>Romance</span>
+    </a>
+
+    <nav aria-label="Navegación principal">
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#hero" class="nav-link active">Inicio</a></li>
+        <li><a href="#el-ramo" class="nav-link">El Ramo</a></li>
+        <li><a href="#personaliza" class="nav-link">Personalizar</a></li>
+        <li><a href="#dedicatoria" class="nav-link">Dedicatoria</a></li>
+        <li><a href="#galeria" class="nav-link">Galería</a></li>
+        <li><a href="#momento-final" class="nav-link">Sorpresa Final</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <div class="header-quote">🤍 Porque la belleza también se regala</div>
+      <!-- Control de Música Ambiental -->
+      <button class="btn-audio-toggle" id="btn-audio-toggle" aria-label="Activar o desactivar música romántica" title="Música romántica ambiental">
+        <div class="audio-waves" id="audio-wave-indicator" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <span id="audio-btn-text">Música</span>
+      </button>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú de navegación">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         SECCIÓN 1: HERO - EL RAMO DE MAQUILLAJE
+         ========================================================================== -->
+    <section class="hero-section" id="hero">
+      <div class="hero-bg-glow" aria-hidden="true"></div>
+
+      <div class="hero-container">
+        <!-- Columna Izquierda: Mensaje & Cuenta Atrás -->
+        <div class="hero-left">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span id="badge-date">25 DE OCTUBRE • DÍA DEL MAQUILLAJE</span>
+          </div>
+
+          <h1 class="hero-title">
+            Un ramo de flores…
+            <span class="hero-title-script">
+              y un poquito de magia para ti
+              <!-- Heart Doodle SVG -->
+              <svg class="heart-doodle" viewBox="0 0 50 50">
+                <path d="M25,40 C10,25 0,16 6,7 C12,-2 22,2 25,10 C28,2 38,-2 44,7 C50,16 40,25 25,40 Z"/>
+              </svg>
+            </span>
+          </h1>
+
+          <p class="hero-desc" id="hero-dedication-snippet">
+            Porque cada rostro tiene una historia, cada sonrisa un brillo propio y tú mereces un detalle tan extraordinario como tu esencia.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#personaliza" class="btn-glow-primary" id="btn-hero-cta">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/>
+              </svg>
+              <span>Sorprende Ahora</span>
+            </a>
+            <a href="#dedicatoria" class="btn-secondary">
+              <span>Leer mi mensaje</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Contador de Celebración -->
+          <div class="countdown-capsules" aria-label="Contador regresivo para celebrar">
+            <div class="time-capsule">
+              <span class="num" id="cd-days">00</span>
+              <span class="lbl">DÍAS</span>
+            </div>
+            <div class="time-capsule">
+              <span class="num" id="cd-hours">14</span>
+              <span class="lbl">HORAS</span>
+            </div>
+            <div class="time-capsule">
+              <span class="num" id="cd-minutes">32</span>
+              <span class="lbl">MIN</span>
+            </div>
+            <div class="time-capsule">
+              <span class="num" id="cd-seconds">18</span>
+              <span class="lbl">SEG</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: El Ramo Protagonista -->
+        <div class="hero-right">
+          <div class="bouquet-card-3d" id="bouquet-3d-card">
+            <div class="bouquet-halo" aria-hidden="true"></div>
+
+            <div class="bouquet-img-wrapper">
+              <img src="bouquet_hero.png" alt="Ramo de rosas rosadas con maquillaje de lujo, labiales, paletas y brochas" class="bouquet-img" id="hero-bouquet-img" onerror="this.src='image.png'">
+            </div>
+
+            <!-- Hotspots interactivos con tooltips explicativos -->
+            <div class="hotspot" style="top: 25%; left: 45%;" aria-label="Paleta de sombras NYX">
+              <span class="hotspot-tooltip">Paleta de Sombras Satinadas</span>
+            </div>
+            <div class="hotspot" style="top: 48%; left: 52%;" aria-label="Rubor mineral rosado">
+              <span class="hotspot-tooltip">Rubor Luminoso Iluminador</span>
+            </div>
+            <div class="hotspot" style="top: 36%; right: 28%;" aria-label="Brocha profesional kabuki">
+              <span class="hotspot-tooltip">Brocha Aterciopelada de Lujo</span>
+            </div>
+            <div class="hotspot" style="top: 32%; left: 32%;" aria-label="Labiales y Glosses">
+              <span class="hotspot-tooltip">Glosses Voluminizadores y Rosas</span>
+            </div>
+
+            <!-- Tarjeta Pequeña interactiva sobre el ramo -->
+            <div class="bouquet-mini-card" id="btn-secret-card" role="button" tabindex="0" title="Haz clic para abrir">
+              <p>“La belleza también se regala ♡”</p>
+              <span>Toca para leer el secreto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Indicador de desplazamiento inferior -->
+      <a href="#el-ramo" class="scroll-indicator" aria-label="Deslizar para descubrir">
+        <span>Desliza para descubrir</span>
+        <div class="scroll-circle-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+          </svg>
+        </div>
+      </a>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 2: BENEFICIOS & EMOCIÓN (TEMA CREMA LUMINOSO)
+         ========================================================================== -->
+    <section class="emotion-section" id="el-ramo">
+      <div class="emotion-container">
+        <!-- Contenido y Beneficios -->
+        <div class="emotion-content">
+          <span class="section-tag">UN REGALO ESPECIAL</span>
+          <h2 class="section-heading-serif">Más que maquillaje,</h2>
+          <span class="section-heading-script">es una emoción</span>
+
+          <p class="emotion-desc">
+            Un ramo de maquillaje es la combinación perfecta entre belleza, creatividad y amor. Diseñado meticulosamente para despertar una sonrisa sincera y recordarle a esa persona cuánto ilumina el mundo.
+          </p>
+
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </div>
+              <div class="benefit-info">
+                <h4>Variedad de productos</h4>
+                <p>Cosméticos seleccionados para todos los gustos y tonos de piel.</p>
+              </div>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <div class="benefit-info">
+                <h4>Marcas reconocidas</h4>
+                <p>Texturas de alta gama, pigmentación duradera y fórmulas seguras.</p>
+              </div>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/>
+                </svg>
+              </div>
+              <div class="benefit-info">
+                <h4>Presentación única</h4>
+                <p>Envoltorios de seda, cintas satinadas y arreglos artesanales.</p>
+              </div>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                </svg>
+              </div>
+              <div class="benefit-info">
+                <h4>Envíos seguros y rápidos</h4>
+                <p>Cuidado en cada detalle para llegar impecable a su destino.</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="#personaliza" class="btn-glow-primary">
+            <span>Ver el Ramo</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Polaroid Collage de la Imagen Original -->
+        <div class="emotion-visual">
+          <div class="polaroid-group">
+            <img src="polaroid_collage.png" alt="Collage de fotos tipo polaroid con detalles de flores y maquillaje: Pequeños detalles, grandes sonrisas" class="polaroid-img" onerror="this.src='image.png'">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 3: PERSONALIZA EL RAMO (INTERACTIVO)
+         ========================================================================== -->
+    <section class="customizer-section" id="personaliza">
+      <div class="section-header-center">
+        <span class="section-tag">EXPERIENCIA INTERACTIVA</span>
+        <h2>Personaliza el Regalo Ideal</h2>
+        <p>Explora cada combinación armoniosa entre flores frescas y maquillaje de alta calidad.</p>
+      </div>
+
+      <!-- Filtros / Pestañas de Ramos -->
+      <div class="bouquet-filter-pills" id="bouquet-tabs" role="tablist">
+        <button class="filter-pill active" data-type="completo" role="tab" aria-selected="true">
+          👑 Combinación Completa
+        </button>
+        <button class="filter-pill" data-type="rosas" role="tab" aria-selected="false">
+          🌸 Rosas Rosadas
+        </button>
+        <button class="filter-pill" data-type="blancas" role="tab" aria-selected="false">
+          🤍 Rosas Blancas
+        </button>
+        <button class="filter-pill" data-type="mixtas" role="tab" aria-selected="false">
+          💐 Flores Mixtas
+        </button>
+        <button class="filter-pill" data-type="labiales" role="tab" aria-selected="false">
+          💄 Labiales & Gloss
+        </button>
+        <button class="filter-pill" data-type="sombras" role="tab" aria-selected="false">
+          ✨ Paleta de Sombras
+        </button>
+        <button class="filter-pill" data-type="rubor" role="tab" aria-selected="false">
+          🎀 Rubor & Brochas
+        </button>
+      </div>
+
+      <!-- Tarjeta Showcase del Ramo Seleccionado -->
+      <div class="customizer-showcase" id="customizer-showcase">
+        <div class="showcase-visual">
+          <span class="showcase-badge" id="showcase-badge">Edición Estrella</span>
+          <img src="bouquet_hero.png" alt="Vista previa del ramo" class="showcase-img" id="showcase-img">
+        </div>
+
+        <div class="showcase-details">
+          <h3 class="showcase-title" id="showcase-title">Edición Lujosa Romance</h3>
+          <span class="showcase-subtitle" id="showcase-subtitle">Flores frescas y maquillaje estelar</span>
+          <p class="showcase-desc" id="showcase-desc">
+            Nuestra composición más aclamada: rosas inglesas en tono rosa empolvado combinadas con paleta de sombras NYX, gloss hidratante, rubor perlado y brochas suaves envueltas en papel satinado con lazo dorado.
+          </p>
+
+          <h4 style="font-size: 0.95rem; color: var(--gold-soft); margin-top: 5px;">Detalles incluidos:</h4>
+          <ul class="elements-included" id="showcase-elements">
+            <li class="element-item">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>6 Rosas Rosadas de Exportación</span>
+            </li>
+            <li class="element-item">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Paleta Nude & Shimmer</span>
+            </li>
+            <li class="element-item">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Gloss Voluminizador Rosado</span>
+            </li>
+            <li class="element-item">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Brocha Kabuki Aterciopelada</span>
+            </li>
+          </ul>
+
+          <button class="btn-glow-primary showcase-action-btn" id="btn-select-bouquet">
+            <span>Elegir este Ramo para mi Sorpresa</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 4: DEDICATORIA ROMÁNTICA (LA CARTA INTERACTIVA)
+         ========================================================================== -->
+    <section class="dedication-section" id="dedicatoria">
+      <div class="dedication-card-wrapper">
+        <div class="letter-envelope" id="letter-card">
+          <!-- Animación de Rosa SVG Flotante -->
+          <div class="blooming-rose-container" aria-hidden="true">
+            <svg width="70" height="70" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="#fff0f5" stroke="#f8c8dc" stroke-width="2"/>
+              <!-- Pétalos exteriores -->
+              <path class="rose-petal-anim" d="M50 20 C65 20, 78 32, 78 48 C78 65, 62 78, 50 82 C38 78, 22 65, 22 48 C22 32, 35 20, 50 20 Z" fill="#f06292" opacity="0.35"/>
+              <!-- Pétalos intermedios -->
+              <path class="rose-petal-anim" d="M50 28 C60 28, 70 38, 70 50 C70 62, 58 72, 50 75 C42 72, 30 62, 30 50 C30 38, 40 28, 50 28 Z" fill="#f06292" opacity="0.6"/>
+              <!-- Centro de la rosa -->
+              <circle cx="50" cy="50" r="14" fill="#e91e63"/>
+              <path d="M46 45 C48 42, 52 42, 54 45 C56 48, 52 53, 50 55 C48 53, 44 48, 46 45 Z" fill="#ffd1dc"/>
+            </svg>
+          </div>
+
+          <div class="dedication-tagline">PALABRAS DESDE EL CORAZÓN</div>
+          <h2 class="dedication-title">
+            “Hay regalos que se ven bonitos…<br>y otros que también hacen sentir bonito”.
+          </h2>
+
+          <!-- Metadatos de la dedicatoria con nombres personalizables -->
+          <div class="letter-meta">
+            <div class="recipient-editable">
+              <span>Para:</span>
+              <input type="text" id="recipient-name-input" class="name-input-field" value="Mi Persona Favorita" title="Haz clic para personalizar el nombre">
+            </div>
+            <div class="letter-date" id="letter-current-date">Día del Maquillaje • Con todo mi amor</div>
+          </div>
+
+          <!-- Cuerpo de la carta con escritura progresiva -->
+          <div class="letter-body">
+            <p id="typewriter-content" class="typewriter-text"></p>
+            <span class="typewriter-cursor" id="typewriter-cursor"></span>
+          </div>
+
+          <div class="letter-signature">
+            <div class="letter-signature-note">Siempre tuyo,</div>
+            <div class="letter-signature-name" id="sender-signature">Con todo mi amor ♡</div>
+          </div>
+
+          <div class="letter-actions">
+            <button class="btn-glow-primary" id="btn-read-letter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+              <span>Volver a leer el mensaje</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 5: GALERÍA VISUAL EDITORIAL & LIGHTBOX
+         ========================================================================== -->
+    <section class="gallery-section" id="galeria">
+      <div class="section-header-center">
+        <span class="section-tag">INSPIRACIÓN & BELLEZA</span>
+        <h2>Galería de Ramos y Detalles</h2>
+        <p>Una mirada cercana a las combinaciones florales y texturas cosméticas más elegantes.</p>
+      </div>
+
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- Ítem 1: Caja de Lujo -->
+        <div class="gallery-item" data-index="0" role="button" tabindex="0">
+          <img src="gallery_gift_luxury.jpg" alt="Caja de regalo rosada con rosas frescas y brochas doradas" class="gallery-thumbnail" onerror="this.src='bouquet_hero.png'">
+          <div class="gallery-overlay">
+            <h4>Cofre Romance & Rosas</h4>
+            <p>Rosas aterciopeladas y set de brochas de oro rosado</p>
+          </div>
+        </div>
+
+        <!-- Ítem 2: Sombras y Velas -->
+        <div class="gallery-item" data-index="1" role="button" tabindex="0">
+          <img src="gallery_roses_palette.jpg" alt="Paleta de sombras con reflejos y rosas rosadas" class="gallery-thumbnail" onerror="this.src='bouquet_hero.png'">
+          <div class="gallery-overlay">
+            <h4>Destellos & Pétalos</h4>
+            <p>Sombras shimmer, labiales velvet y ambiente cálido</p>
+          </div>
+        </div>
+
+        <!-- Ítem 3: Lazo de Satén en Ramo -->
+        <div class="gallery-item" data-index="2" role="button" tabindex="0">
+          <img src="gallery_bouquet_ribbon.jpg" alt="Arreglo de ramo de flores con cinta satinada y labial gloss" class="gallery-thumbnail" onerror="this.src='bouquet_hero.png'">
+          <div class="gallery-overlay">
+            <h4>Lazo Satinado y Gloss</h4>
+            <p>Cuidado artesanal en el anudado con toques dorados</p>
+          </div>
+        </div>
+
+        <!-- Ítem 4: El Ramo Icono Hero -->
+        <div class="gallery-item" data-index="3" role="button" tabindex="0">
+          <img src="bouquet_hero.png" alt="Ramo de rosas rosadas con paleta NYX y labiales" class="gallery-thumbnail" onerror="this.src='image.png'">
+          <div class="gallery-overlay">
+            <h4>El Ramo Protagonista</h4>
+            <p>Armonía completa entre flores, gloss y paletas</p>
+          </div>
+        </div>
+
+        <!-- Ítem 5: Detalle de Rosas y Labial -->
+        <div class="gallery-item" data-index="4" role="button" tabindex="0">
+          <img src="gallery_center_bouquet.jpg" alt="Detalle en primer plano de rosas y labial" class="gallery-thumbnail" onerror="this.src='gallery_gift_luxury.jpg'">
+          <div class="gallery-overlay">
+            <h4>Rosa Imperial & Velvet</h4>
+            <p>Fórmulas hidratantes y pétalos en su punto justo</p>
+          </div>
+        </div>
+
+        <!-- Ítem 6: Rubor Luminoso y Polvos -->
+        <div class="gallery-item" data-index="5" role="button" tabindex="0">
+          <img src="gallery_blush_gloss.jpg" alt="Rubor rosado con brillo y gloss" class="gallery-thumbnail" onerror="this.src='gallery_roses_palette.jpg'">
+          <div class="gallery-overlay">
+            <h4>Toques de Luz & Rubor</h4>
+            <p>Pigmentos minerales para iluminar cada sonrisa</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 6: MOMENTO FINAL (REVELACIÓN DEL REGALO & CIERRE)
+         ========================================================================== -->
+    <section class="finale-section" id="momento-final">
+      <img src="footer_banner_clean.jpg" alt="Fondo romántico con luces y brochas de maquillaje" class="finale-banner-bg" onerror="this.style.display='none'">
+
+      <div class="finale-container">
+        <!-- Corazón Neón Luminoso -->
+        <svg class="glowing-neon-heart" viewBox="0 0 24 24" fill="var(--pink-intense)">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+
+        <div class="finale-pretitle">HOY ES EL DÍA</div>
+        <h2 class="finale-title">Celebra la belleza</h2>
+        <span class="finale-script">en todas sus formas</span>
+
+        <p class="finale-quote" id="finale-quote-text">
+          “Lo más bonito de este regalo es la sonrisa que espero regalarte.”
+        </p>
+
+        <!-- Tarjeta Conmemorativa Final -->
+        <div class="keepsake-card">
+          <div class="keepsake-meta">REGALO CONMEMORATIVO ESPECIAL</div>
+          <div class="keepsake-names">
+            Para <span id="keepsake-recipient-name" style="color: var(--pink-pastel); font-weight: bold;">Mi Persona Favorita</span>
+          </div>
+          <p class="keepsake-text" id="keepsake-custom-msg">
+            Que cada vez que veas una flor o uses uno de estos detalles, recuerdes lo hermosa, valiosa y querida que eres cada día.
+          </p>
+        </div>
+
+        <div class="finale-actions">
+          <button class="btn-glow-primary" id="btn-replay-surprise">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+            </svg>
+            <span>Volver a vivir la sorpresa</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       PIE DE PÁGINA
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="footer-brand">
+      BeautyGift <span>Romance</span>
+    </div>
+    <p class="footer-text">
+      Diseñado con amor y delicadeza para celebrar el Día del Maquillaje y la belleza auténtica.
+    </p>
+
+    <div class="footer-controls">
+      <button class="control-btn" id="btn-toggle-motion">⚡ Alternar Modo Suave / Calmo</button>
+      <button class="control-btn" id="btn-toggle-petals">🌸 Lluvia de Pétalos (Activa)</button>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODALES & ELEMENTOS FLOTANTES
+       ========================================================================== -->
+
+  <!-- Modal Lightbox de Galería -->
+  <div id="lightbox-modal" role="dialog" aria-modal="true" aria-label="Visualizador de Galería">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightbox-close" aria-label="Cerrar visualizador">✕</button>
+      <button class="lightbox-nav-btn lightbox-prev" id="lightbox-prev" aria-label="Imagen anterior">❮</button>
+      <img src="" alt="Imagen ampliada" class="lightbox-img" id="lightbox-img">
+      <button class="lightbox-nav-btn lightbox-next" id="lightbox-next" aria-label="Siguiente imagen">❯</button>
+      <div class="lightbox-caption">
+        <h3 id="lightbox-caption-title"></h3>
+        <p id="lightbox-caption-desc"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Secreto de la Tarjeta del Ramo -->
+  <div id="secret-card-modal" role="dialog" aria-modal="true" aria-label="Nota secreta del ramo">
+    <div class="secret-card-content">
+      <button class="secret-card-close" id="secret-card-close" aria-label="Cerrar nota">✕</button>
+      <div style="font-size: 2rem; margin-bottom: 10px;">💌</div>
+      <h3 style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--wine-dark); margin-bottom: 10px;">
+        Para Ti, Con Mucho Amor
+      </h3>
+      <p style="font-size: 1.05rem; line-height: 1.7; color: var(--brown-rose); margin-bottom: 20px;" id="secret-card-text">
+        “No hay maquillaje que opaque tu luz interior, ni flor que iguale tu sonrisa. Este detalle es solo un recordatorio de lo increíble que eres.”
+      </p>
+      <button class="btn-glow-primary" id="btn-close-secret-card" style="padding: 10px 26px; font-size: 0.9rem;">
+        Guardar en mi corazón
+      </button>
+    </div>
+  </div>
+
+  <!-- Notificación Toast -->
+  <div id="toast-notification" role="status" aria-live="polite">
+    <span style="font-size: 1.3rem;">✨</span>
+    <span id="toast-msg">Opción seleccionada con éxito</span>
+  </div>
+
+  <!-- ==========================================================================
+       SCRIPTS JAVASCRIPT (VANILLA, INTERACTIVO & SIN DEPENDENCIAS)
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       CONFIGURACIÓN MAESTRA PERSONALIZABLE
+       Modifica libremente estos valores para adaptar la experiencia
+       ========================================================================== */
+    const CONFIG = {
+      // Destinatario y Remitente
+      destinataria: "Mi Persona Favorita",
+      remitente: "Con todo mi amor",
+      fechaEspecial: "25 de Octubre • Día del Maquillaje",
+
+      // Dedicatoria de la carta
+      dedicatoriaPrincipal: "Hoy quería regalarte algo diferente, algo que reuniera flores, colores y pequeños detalles capaces de sacarte una sonrisa. Porque no hace falta una ocasión perfecta para recordarle a alguien lo especial que es.",
+
+      // Cita del momento final
+      mensajeFinal: "“Lo más bonito de este regalo es la sonrisa que espero regalarte.”",
+
+      // Mensaje de la tarjeta pequeña del ramo
+      mensajeSecreto: "“No hay maquillaje que opaque tu luz interior, ni flor que iguale tu sonrisa. Este detalle es solo un recordatorio de lo increíble que eres.”",
+
+      // Paleta del tema
+      paleta: {
+        rosaPastel: "#F8C8DC",
+        rosaIntenso: "#F06292",
+        rosaEmpolvado: "#E8A1B0",
+        blancoCrema: "#FFF8F5",
+        doradoSuave: "#E7C98B",
+        vinoOscuro: "#301824",
+        marronRosado: "#70434E"
+      },
+
+      // Opciones de efectos y rendimiento
+      maxParticulas: 40,
+      sonidoHabilitado: true,
+      lluviaActiva: true,
+      modoSuave: false
+    };
+
+    /* ==========================================================================
+       SINTETIZADOR DE AUDIO ROMÁNTICO (WEB AUDIO API - 100% OFFLINE)
+       Genera acordes y campanas dulces sin requerir archivos mp3 externos
+       ========================================================================== */
+    class RomanticSoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.chords = [
+          [261.63, 329.63, 392.00, 493.88], // Cmaj7
+          [220.00, 261.63, 329.63, 440.00], // Am7
+          [174.61, 220.00, 261.63, 329.63], // Fmaj7
+          [196.00, 246.94, 293.66, 349.23]  // G7
+        ];
+        this.currentChordIndex = 0;
+        this.timer = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playChime(freq = 523.25, type = 'sine') {
+        if (!this.ctx || !CONFIG.sonidoHabilitado) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+          gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 1.2);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start();
+          osc.stop(this.ctx.currentTime + 1.2);
+        } catch (e) {
+          console.warn("Audio chime prevented:", e);
+        }
+      }
+
+      playRomanticArpeggio() {
+        if (!this.ctx || !this.isPlaying || !CONFIG.sonidoHabilitado) return;
+        const chord = this.chords[this.currentChordIndex];
+        this.currentChordIndex = (this.currentChordIndex + 1) % this.chords.length;
+
+        chord.forEach((noteFreq, idx) => {
+          setTimeout(() => {
+            if (!this.isPlaying) return;
+            try {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              const filter = this.ctx.createBiquadFilter();
+
+              osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+              osc.frequency.setValueAtTime(noteFreq, this.ctx.currentTime);
+
+              filter.type = 'lowpass';
+              filter.frequency.setValueAtTime(800, this.ctx.currentTime);
+
+              gain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+              gain.gain.linearRampToValueAtTime(0.04, this.ctx.currentTime + 0.3);
+              gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 2.5);
+
+              osc.connect(filter);
+              filter.connect(gain);
+              gain.connect(this.ctx.destination);
+
+              osc.start();
+              osc.stop(this.ctx.currentTime + 2.6);
+            } catch (err) {}
+          }, idx * 450);
+        });
+
+        this.timer = setTimeout(() => {
+          if (this.isPlaying) this.playRomanticArpeggio();
+        }, 3200);
+      }
+
+      start() {
+        this.init();
+        if (!this.ctx) return;
+        this.isPlaying = true;
+        this.playRomanticArpeggio();
+      }
+
+      stop() {
+        this.isPlaying = false;
+        if (this.timer) clearTimeout(this.timer);
+      }
+
+      toggle() {
+        if (this.isPlaying) {
+          this.stop();
+          return false;
+        } else {
+          this.start();
+          return true;
+        }
+      }
+    }
+
+    const audioEngine = new RomanticSoundEngine();
+
+    /* ==========================================================================
+       SISTEMA DE PARTÍCULAS: PÉTALOS FLOTANTES Y DESTELLOS MÁGICOS
+       ========================================================================== */
+    class ParticleEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.isRunning = true;
+        this.mousePos = { x: this.width / 2, y: this.height / 2 };
+
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('mousemove', (e) => {
+          this.mousePos.x = e.clientX;
+          this.mousePos.y = e.clientY;
+        });
+
+        // Crear partículas iniciales
+        this.createParticles(CONFIG.maxParticulas);
+        this.loop();
+      }
+
+      resize() {
+        this.width = this.canvas.width = window.innerWidth;
+        this.height = this.canvas.height = window.innerHeight;
+      }
+
+      createParticles(count) {
+        this.particles = [];
+        for (let i = 0; i < count; i++) {
+          this.particles.push(this.newParticle());
+        }
+      }
+
+      newParticle(x = null, y = null, isSparkle = null) {
+        const type = isSparkle !== null ? (isSparkle ? 'sparkle' : 'petal') : (Math.random() > 0.4 ? 'petal' : 'sparkle');
+        return {
+          type: type,
+          x: x !== null ? x : Math.random() * this.width,
+          y: y !== null ? y : Math.random() * this.height,
+          size: type === 'petal' ? (Math.random() * 12 + 8) : (Math.random() * 3 + 1),
+          speedY: type === 'petal' ? (Math.random() * 1.2 + 0.6) : (Math.random() * 0.6 + 0.2),
+          speedX: Math.sin(Math.random() * Math.PI) * 0.8 - 0.4,
+          rotation: Math.random() * 360,
+          rotationSpeed: (Math.random() - 0.5) * 2,
+          opacity: Math.random() * 0.6 + 0.3,
+          color: type === 'petal' ? (Math.random() > 0.5 ? '#f06292' : '#f8c8dc') : '#e7c98b',
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: Math.random() * 0.03 + 0.01
+        };
+      }
+
+      celebrationBurst(originX = this.width / 2, originY = this.height / 2) {
+        for (let i = 0; i < 45; i++) {
+          const p = this.newParticle(originX, originY);
+          const angle = Math.random() * Math.PI * 2;
+          const velocity = Math.random() * 8 + 3;
+          p.speedX = Math.cos(angle) * velocity;
+          p.speedY = Math.sin(angle) * velocity - 2;
+          p.opacity = 1;
+          this.particles.push(p);
+        }
+      }
+
+      loop() {
+        if (!this.isRunning) return;
+
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        if (CONFIG.lluviaActiva) {
+          for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+
+            p.wobble += p.wobbleSpeed;
+            p.x += p.speedX + Math.sin(p.wobble) * 0.8;
+            p.y += p.speedY;
+            p.rotation += p.rotationSpeed;
+
+            // Renderizado según tipo
+            this.ctx.save();
+            this.ctx.translate(p.x, p.y);
+            this.ctx.rotate((p.rotation * Math.PI) / 180);
+            this.ctx.globalAlpha = p.opacity;
+
+            if (p.type === 'petal') {
+              // Dibujar pétalo de rosa suave
+              this.ctx.fillStyle = p.color;
+              this.ctx.beginPath();
+              this.ctx.ellipse(0, 0, p.size * 0.6, p.size, 0, 0, Math.PI * 2);
+              this.ctx.fill();
+            } else {
+              // Dibujar destello dorado con glow
+              this.ctx.fillStyle = p.color;
+              this.ctx.shadowBlur = 8;
+              this.ctx.shadowColor = '#e7c98b';
+              this.ctx.beginPath();
+              this.ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+              this.ctx.fill();
+            }
+
+            this.ctx.restore();
+
+            // Reciclaje de partículas al salir de la pantalla
+            if (p.y > this.height + 20 || p.x < -30 || p.x > this.width + 30) {
+              this.particles[i] = this.newParticle(Math.random() * this.width, -20);
+            }
+          }
+        }
+
+        requestAnimationFrame(() => this.loop());
+      }
+    }
+
+    /* ==========================================================================
+       CATÁLOGO DE RAMOS INTERACTIVOS (SECCIÓN 3)
+       ========================================================================== */
+    const BOUQUET_DATA = {
+      completo: {
+        badge: "Edición Estrella",
+        title: "Edición Lujosa Romance",
+        subtitle: "Flores frescas y maquillaje estelar",
+        desc: "Nuestra composición más aclamada: rosas inglesas en tono rosa empolvado combinadas con paleta de sombras NYX, gloss hidratante, rubor perlado y brochas suaves envueltas en papel satinado con lazo dorado.",
+        img: "bouquet_hero.png",
+        elements: [
+          "6 Rosas Rosadas de Exportación",
+          "Paleta Nude & Shimmer",
+          "Gloss Voluminizador Rosado",
+          "Brocha Kabuki Aterciopelada"
+        ]
+      },
+      rosas: {
+        badge: "Puro Romance",
+        title: "Sinfonía de Rosas Rosadas",
+        subtitle: "Amor tierno y elegancia sin tiempo",
+        desc: "Un ramillete dedicado a la suavidad: rosas vivas seleccionadas pétalo a pétalo, acompañadas de bálsamos labiales nutritivos con aroma a vainilla y toques florales.",
+        img: "gallery_gift_luxury.jpg",
+        elements: [
+          "12 Rosas Rosadas Premium",
+          "Bálsamo Hidratante con Brillo",
+          "Cinta de Satén Rosa Empolvado",
+          "Tarjeta con Dedicatoria"
+        ]
+      },
+      blancas: {
+        badge: "Elegancia Serena",
+        title: "Pureza & Luz Blanca",
+        subtitle: "Sofisticación pulcra y radiante",
+        desc: "Rosas blancas satinadas que transmiten paz, combinadas con iluminador líquido nacarado para realzar la luz natural de su rostro de forma sutil y distinguida.",
+        img: "gallery_roses_palette.jpg",
+        elements: [
+          "8 Rosas Blancas de Invernadero",
+          "Iluminador Líquido Nacarado",
+          "Mini Espejo de Cartera Dorado",
+          "Envoltura Perla Translúcida"
+        ]
+      },
+      mixtas: {
+        badge: "Fantasía Primaveral",
+        title: "Bouquet Flores Mixtas",
+        subtitle: "Alegría, variedad y encanto",
+        desc: "Una celebración colorida de ranúnculos, margaritas rosadas y mini rosas combinadas con labiales matte de larga duración en tonos blush y nude coral.",
+        img: "gallery_bouquet_ribbon.jpg",
+        elements: [
+          "Mix Floral Campestre Rosado",
+          "Dúo Labial Matte & Delineador",
+          "Papel Kraft Rosa Pastel",
+          "Rocío Fijador Aromático"
+        ]
+      },
+      labiales: {
+        badge: "Beso Aterciopelado",
+        title: "Selección Labiales & Gloss",
+        subtitle: "Brillo, hidratación y color seductor",
+        desc: "Un ramo diseñado especialmente para quienes aman destacar sus labios. Fórmulas con ácido hialurónico, acabados gloss de alta fijación y rosas en botón.",
+        img: "gallery_center_bouquet.jpg",
+        elements: [
+          "3 Glosses Voluminizadores",
+          "2 Labiales Velvet Matte",
+          "Rosas Baby Pink en Botón",
+          "Cinta de Seda Carmesí"
+        ]
+      },
+      sombras: {
+        badge: "Mirada Radiante",
+        title: "Edición Paleta de Sombras",
+        subtitle: "Colores para crear historias con la mirada",
+        desc: "El regalo soñado para crear miradas memorables. Paleta versátil con tonos rosas, cobrizos y destellos dorados junto a rosas inglesas de fragancia dulce.",
+        img: "gallery_roses_palette.jpg",
+        elements: [
+          "Paleta 9 Sombras Pigmentadas",
+          "Set de Brochas para Ojos",
+          "Rosas Rosadas Aromáticas",
+          "Detalles en Pan de Oro"
+        ]
+      },
+      rubor: {
+        badge: "Toque de Luz",
+        title: "Arreglo Rubor & Brochas",
+        subtitle: "El secreto de unas mejillas sonrientes",
+        desc: "Rubores minerales horneados con reflejos sutiles que aportan vitalidad inmediata, acompañados de brochas extra suaves que acarician la piel.",
+        img: "gallery_blush_gloss.jpg",
+        elements: [
+          "Rubor Mineral Dúo Rosado",
+          "Brocha de Precisión para Rubor",
+          "Rosas Rosadas Abiertas",
+          "Lazo Grande con Brillo"
+        ]
+      }
+    };
+
+    /* ==========================================================================
+       DATOS DE LA GALERÍA VISUAL Y LIGHTBOX
+       ========================================================================== */
+    const GALLERY_ITEMS = [
+      {
+        src: "gallery_gift_luxury.jpg",
+        title: "Cofre Romance & Rosas",
+        desc: "Rosas aterciopeladas y set de brochas de oro rosado"
+      },
+      {
+        src: "gallery_roses_palette.jpg",
+        title: "Destellos & Pétalos",
+        desc: "Sombras shimmer, labiales velvet y ambiente cálido con velas"
+      },
+      {
+        src: "gallery_bouquet_ribbon.jpg",
+        title: "Lazo Satinado y Gloss",
+        desc: "Cuidado artesanal en el anudado con toques dorados y rosas frescas"
+      },
+      {
+        src: "bouquet_hero.png",
+        title: "El Ramo Protagonista",
+        desc: "Armonía completa entre flores, gloss y paletas cosméticas de alta gama"
+      },
+      {
+        src: "gallery_center_bouquet.jpg",
+        title: "Rosa Imperial & Velvet",
+        desc: "Fórmulas hidratantes y pétalos en su punto justo de frescura"
+      },
+      {
+        src: "gallery_blush_gloss.jpg",
+        title: "Toques de Luz & Rubor",
+        desc: "Pigmentos minerales horneados para iluminar cada sonrisa"
+      }
+    ];
+
+    /* ==========================================================================
+       CONTROLADOR PRINCIPAL DE LA APLICACIÓN
+       ========================================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Instanciar motor de partículas
+      const particleEngine = new ParticleEngine('particles-canvas');
+
+      // Elementos del DOM
+      const surpriseScreen = document.getElementById('surprise-screen');
+      const giftBox = document.getElementById('gift-box');
+      const btnDiscover = document.getElementById('btn-discover');
+      const btnSkipIntro = document.getElementById('btn-skip-intro');
+      const siteHeader = document.getElementById('site-header');
+      const scrollProgress = document.getElementById('scroll-progress');
+      const btnAudioToggle = document.getElementById('btn-audio-toggle');
+      const audioWaves = document.getElementById('audio-wave-indicator');
+      const audioBtnText = document.getElementById('audio-btn-text');
+      const bouquet3dCard = document.getElementById('bouquet-3d-card');
+      const recipientInput = document.getElementById('recipient-name-input');
+      const keepsakeRecipient = document.getElementById('keepsake-recipient-name');
+      const typewriterContent = document.getElementById('typewriter-content');
+      const btnReadLetter = document.getElementById('btn-read-letter');
+      const toast = document.getElementById('toast-notification');
+      const toastMsg = document.getElementById('toast-msg');
+
+      // Modales
+      const secretCardModal = document.getElementById('secret-card-modal');
+      const btnSecretCard = document.getElementById('btn-secret-card');
+      const secretCardClose = document.getElementById('secret-card-close');
+      const btnCloseSecretCard = document.getElementById('btn-close-secret-card');
+
+      const lightboxModal = document.getElementById('lightbox-modal');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxTitle = document.getElementById('lightbox-caption-title');
+      const lightboxDesc = document.getElementById('lightbox-caption-desc');
+      const lightboxClose = document.getElementById('lightbox-close');
+      const lightboxPrev = document.getElementById('lightbox-prev');
+      const lightboxNext = document.getElementById('lightbox-next');
+      let currentLightboxIndex = 0;
+
+      // Cargar personalización desde localStorage si existe
+      const savedRecipient = localStorage.getItem('beautyGift_recipient');
+      if (savedRecipient) {
+        recipientInput.value = savedRecipient;
+        keepsakeRecipient.textContent = savedRecipient;
+      }
+
+      /* ==========================================================================
+         1. APERTURA DE LA CAJA DE REGALO (UNBOXING)
+         ========================================================================== */
+      function openSurpriseBox() {
+        if (giftBox.classList.contains('opening')) return;
+
+        giftBox.classList.add('opening');
+        audioEngine.playChime(659.25, 'triangle');
+        setTimeout(() => audioEngine.playChime(880.00, 'sine'), 180);
+
+        // Dispersión de partículas festivas
+        const boxRect = giftBox.getBoundingClientRect();
+        particleEngine.celebrationBurst(boxRect.left + boxRect.width / 2, boxRect.top + boxRect.height / 2);
+
+        // Iniciar música si está habilitada
+        if (CONFIG.sonidoHabilitado && !audioEngine.isPlaying) {
+          audioEngine.start();
+          audioWaves.classList.add('playing');
+          audioBtnText.textContent = 'Sonando';
+        }
+
+        setTimeout(() => {
+          surpriseScreen.classList.add('opened');
+          // Desencadenar animación en hero
+          typewriteDedication();
+        }, 1100);
+      }
+
+      giftBox.addEventListener('click', openSurpriseBox);
+      btnDiscover.addEventListener('click', openSurpriseBox);
+
+      btnSkipIntro.addEventListener('click', () => {
+        surpriseScreen.classList.add('opened');
+        typewriteDedication();
+      });
+
+      /* ==========================================================================
+         2. NAVEGACIÓN Y BARRA DE PROGRESO DE LECTURA
+         ========================================================================== */
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        scrollProgress.style.width = progress + '%';
+
+        if (scrollTop > 80) {
+          siteHeader.classList.add('scrolled');
+        } else {
+          siteHeader.classList.remove('scrolled');
+        }
+
+        // Resaltar sección activa en menú
+        const sections = document.querySelectorAll('section[id]');
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 120;
+          const height = sec.offsetHeight;
+          const id = sec.getAttribute('id');
+          if (scrollTop >= top && scrollTop < top + height) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === '#' + id) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      });
+
+      // Menú móvil
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      const navLinks = document.getElementById('nav-links');
+      mobileBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+      });
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => navLinks.classList.remove('open'));
+      });
+
+      /* ==========================================================================
+         3. AUDIO AMBIENTAL Y CONTROLES
+         ========================================================================== */
+      btnAudioToggle.addEventListener('click', () => {
+        const playing = audioEngine.toggle();
+        if (playing) {
+          audioWaves.classList.add('playing');
+          audioBtnText.textContent = 'Sonando';
+          showToast('Música ambiental iniciada 🎵');
+        } else {
+          audioWaves.classList.remove('playing');
+          audioBtnText.textContent = 'Música';
+          showToast('Música en pausa');
+        }
+      });
+
+      /* ==========================================================================
+         4. EFECTO 3D PARALLAX EN EL RAMO PROTAGONISTA
+         ========================================================================== */
+      if (bouquet3dCard) {
+        document.addEventListener('mousemove', (e) => {
+          if (CONFIG.modoSuave || window.innerWidth < 992) return;
+          const rect = bouquet3dCard.getBoundingClientRect();
+          const cardCenterX = rect.left + rect.width / 2;
+          const cardCenterY = rect.top + rect.height / 2;
+          const deltaX = (e.clientX - cardCenterX) / (window.innerWidth / 2);
+          const deltaY = (e.clientY - cardCenterY) / (window.innerHeight / 2);
+
+          const rotX = -deltaY * 12;
+          const rotY = deltaX * 14;
+
+          bouquet3dCard.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+
+        bouquet3dCard.addEventListener('mouseleave', () => {
+          bouquet3dCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+      }
+
+      /* ==========================================================================
+         5. COUNTDOWN TIMER DINÁMICO
+         ========================================================================== */
+      function updateCountdown() {
+        const now = new Date();
+        // Fijar el objetivo al 25 de Octubre
+        let targetYear = now.getFullYear();
+        let targetDate = new Date(targetYear, 9, 25, 23, 59, 59);
+
+        // Si ya pasó este año, contar para el próximo
+        if (now > targetDate) {
+          targetDate = new Date(targetYear + 1, 9, 25, 23, 59, 59);
+        }
+
+        const diff = targetDate - now;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      /* ==========================================================================
+         6. SECCIÓN PERSONALIZAR: CAMBIO DE PESTAÑAS Y CONTENIDO
+         ========================================================================== */
+      const tabs = document.querySelectorAll('.filter-pill');
+      const showcaseImg = document.getElementById('showcase-img');
+      const showcaseBadge = document.getElementById('showcase-badge');
+      const showcaseTitle = document.getElementById('showcase-title');
+      const showcaseSubtitle = document.getElementById('showcase-subtitle');
+      const showcaseDesc = document.getElementById('showcase-desc');
+      const showcaseElements = document.getElementById('showcase-elements');
+      const btnSelectBouquet = document.getElementById('btn-select-bouquet');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+
+          const type = tab.getAttribute('data-type');
+          const data = BOUQUET_DATA[type];
+          if (!data) return;
+
+          audioEngine.playChime(698.46, 'sine');
+
+          // Transición suave en imagen
+          showcaseImg.style.opacity = '0';
+          showcaseImg.style.transform = 'scale(0.96)';
+
+          setTimeout(() => {
+            showcaseBadge.textContent = data.badge;
+            showcaseTitle.textContent = data.title;
+            showcaseSubtitle.textContent = data.subtitle;
+            showcaseDesc.textContent = data.desc;
+            showcaseImg.src = data.img;
+
+            // Renderizar elementos incluidos
+            showcaseElements.innerHTML = data.elements.map(el => `
+              <li class="element-item">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span>${el}</span>
+              </li>
+            `).join('');
+
+            showcaseImg.style.opacity = '1';
+            showcaseImg.style.transform = 'scale(1)';
+          }, 250);
+        });
+      });
+
+      btnSelectBouquet.addEventListener('click', () => {
+        audioEngine.playChime(783.99, 'triangle');
+        const activeTab = document.querySelector('.filter-pill.active');
+        const title = activeTab ? activeTab.textContent.trim() : "Ramo";
+        particleEngine.celebrationBurst(window.innerWidth / 2, window.innerHeight / 2);
+        showToast(`¡Has elegido: ${title}! Agregado con amor 🌸`);
+      });
+
+      /* ==========================================================================
+         7. SECCIÓN DEDICATORIA: MÁQUINA DE ESCRIBIR & CAMBIO DE NOMBRE
+         ========================================================================== */
+      let typewriterTimer = null;
+      function typewriteDedication() {
+        if (typewriterTimer) clearTimeout(typewriterTimer);
+        const text = CONFIG.dedicatoriaPrincipal;
+        typewriterContent.textContent = '';
+        let index = 0;
+
+        function typeNext() {
+          if (index < text.length) {
+            typewriterContent.textContent += text.charAt(index);
+            index++;
+            typewriterTimer = setTimeout(typeNext, 24);
+          }
+        }
+        typeNext();
+      }
+
+      btnReadLetter.addEventListener('click', () => {
+        audioEngine.playChime(587.33, 'sine');
+        typewriteDedication();
+        showToast("Releyendo dedicatoria especial 💌");
+      });
+
+      recipientInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim() || CONFIG.destinataria;
+        keepsakeRecipient.textContent = val;
+        localStorage.setItem('beautyGift_recipient', val);
+      });
+
+      /* ==========================================================================
+         8. MODAL SECRETO DE LA TARJETA DEL RAMO
+         ========================================================================== */
+      btnSecretCard.addEventListener('click', () => {
+        audioEngine.playChime(783.99, 'sine');
+        secretCardModal.classList.add('active');
+        particleEngine.celebrationBurst(window.innerWidth / 2, window.innerHeight / 2);
+      });
+
+      function closeSecretModal() {
+        secretCardModal.classList.remove('active');
+      }
+      secretCardClose.addEventListener('click', closeSecretModal);
+      btnCloseSecretCard.addEventListener('click', closeSecretModal);
+      secretCardModal.addEventListener('click', (e) => {
+        if (e.target === secretCardModal) closeSecretModal();
+      });
+
+      /* ==========================================================================
+         9. GALERÍA VISUAL Y LIGHTBOX MODAL
+         ========================================================================== */
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      function openLightbox(index) {
+        currentLightboxIndex = index;
+        const item = GALLERY_ITEMS[index];
+        if (!item) return;
+
+        lightboxImg.src = item.src;
+        lightboxTitle.textContent = item.title;
+        lightboxDesc.textContent = item.desc;
+        lightboxModal.classList.add('active');
+        audioEngine.playChime(659.25, 'sine');
+      }
+
+      function closeLightbox() {
+        lightboxModal.classList.remove('active');
+      }
+
+      galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const idx = parseInt(item.getAttribute('data-index'), 10);
+          openLightbox(idx);
+        });
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxModal.addEventListener('click', (e) => {
+        if (e.target === lightboxModal) closeLightbox();
+      });
+
+      lightboxPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentLightboxIndex = (currentLightboxIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length;
+        openLightbox(currentLightboxIndex);
+      });
+
+      lightboxNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentLightboxIndex = (currentLightboxIndex + 1) % GALLERY_ITEMS.length;
+        openLightbox(currentLightboxIndex);
+      });
+
+      // Atajos de teclado para accesibilidad
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeLightbox();
+          closeSecretModal();
+        } else if (lightboxModal.classList.contains('active')) {
+          if (e.key === 'ArrowLeft') lightboxPrev.click();
+          if (e.key === 'ArrowRight') lightboxNext.click();
+        }
+      });
+
+      /* ==========================================================================
+         10. MOMENTO FINAL: REPETIR LA SORPRESA
+         ========================================================================== */
+      const btnReplaySurprise = document.getElementById('btn-replay-surprise');
+      btnReplaySurprise.addEventListener('click', () => {
+        audioEngine.playChime(880.00, 'triangle');
+        particleEngine.celebrationBurst(window.innerWidth / 2, window.innerHeight * 0.4);
+
+        // Volver a mostrar pantalla de sorpresa suavemente
+        giftBox.classList.remove('opening');
+        surpriseScreen.classList.remove('opened');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast("¡Reviviendo la emoción de la sorpresa! 🎁");
+      });
+
+      /* ==========================================================================
+         11. CONTROLES DEL PIE DE PÁGINA
+         ========================================================================== */
+      const btnToggleMotion = document.getElementById('btn-toggle-motion');
+      const btnTogglePetals = document.getElementById('btn-toggle-petals');
+
+      btnToggleMotion.addEventListener('click', () => {
+        CONFIG.modoSuave = !CONFIG.modoSuave;
+        if (CONFIG.modoSuave) {
+          btnToggleMotion.textContent = '⚡ Modo Suave (Activado)';
+          showToast('Animaciones en modo calmo');
+        } else {
+          btnToggleMotion.textContent = '⚡ Alternar Modo Suave / Calmo';
+          showToast('Efectos completos restaurados');
+        }
+      });
+
+      btnTogglePetals.addEventListener('click', () => {
+        CONFIG.lluviaActiva = !CONFIG.lluviaActiva;
+        if (CONFIG.lluviaActiva) {
+          btnTogglePetals.textContent = '🌸 Lluvia de Pétalos (Activa)';
+          showToast('Lluvia de flores activada');
+        } else {
+          btnTogglePetals.textContent = '🌸 Lluvia de Pétalos (Pausada)';
+          showToast('Lluvia de flores pausada');
+        }
+      });
+
+      /* ==========================================================================
+         12. UTILIDAD DE NOTIFICACIÓN TOAST
+         ========================================================================== */
+      let toastTimeout = null;
+      function showToast(msg) {
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastMsg.textContent = msg;
+        toast.classList.add('show');
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+
+      // Detener loops cuando la pestaña esté oculta para ahorrar batería/CPU
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          particleEngine.isRunning = false;
+        } else {
+          particleEngine.isRunning = true;
+          particleEngine.loop();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
